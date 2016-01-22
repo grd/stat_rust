@@ -1,0 +1,6 @@
+[package]
+name = "stat"
+version = "0.1.0"
+authors = ["Gerard van de Schoot <gvdschoot@gmail.com>"]
+
+[dependencies]
