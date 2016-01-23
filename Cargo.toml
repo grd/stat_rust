@@ -1,6 +1,14 @@
 [package]
 name = "stat"
 version = "0.2.0"
-authors = ["Gerard van de Schoot <gvdschoot@gmail.com>"]
+authors = ["G. van de Schoot <gvdschoot@gmail.com>"]
+description = "GSL Statistics written in Rust"
+documentation = "README.md"
+homepage = "https://github.com/grd/stat_rust"
+repository = "https://github.com/grd/stat_rust"
+readme = "README.md"
+keywords = ["statistics", "stats", "stat", "GSL"]
+license = "GPLv2"
+license-file = "LICENSE"
 
 [dependencies]
