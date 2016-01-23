@@ -34,12 +34,12 @@ pub fn mean<T: F64>(data: &[T]) -> f64 {
 
 // absdev
 
-pub fn absdev<T: F64>(data: &Vec<T>) -> f64 {
+pub fn absdev<T: F64>(data: &[T]) -> f64 {
     absdev_mean(data, mean(data))
 }
 
 // absdev_mean finds the absolute deviation of the data interface
-pub fn absdev_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn absdev_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     let mut sum = 0.0;
     // the sum of the absolute deviations
     for val in data {
@@ -51,7 +51,7 @@ pub fn absdev_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
 // covariance
 
 // takes a dataset and calculates the covariance
-fn covariance_nonpub<T: F64>(data1: &Vec<T>, data2: &Vec<T>, mean1: f64, mean2: f64) -> f64 {
+fn covariance_nonpub<T: F64>(data1: &[T], data2: &[T], mean1: f64, mean2: f64) -> f64 {
     let mut res = 0.0;
     // calculate the sum of the squares
     for i in 0..data1.len() {
@@ -62,13 +62,13 @@ fn covariance_nonpub<T: F64>(data1: &Vec<T>, data2: &Vec<T>, mean1: f64, mean2: 
     res
 }
 
-pub fn covariance_mean<T: F64>(data1: &Vec<T>, data2: &Vec<T>, mean1: f64, mean2: f64) -> f64 {
+pub fn covariance_mean<T: F64>(data1: &[T], data2: &[T], mean1: f64, mean2: f64) -> f64 {
     let n = data1.len();
     let covariance = covariance_nonpub(data1, data2, mean1, mean2);
     covariance * (n as f64) / (n - 1) as f64
 }
 
-pub fn covariance<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
+pub fn covariance<T: F64>(data1: &[T], data2: &[T]) -> f64 {
     let mean1 = mean(data1);
     let mean2 = mean(data2);
     covariance_mean(data1, data2, mean1, mean2)
@@ -91,7 +91,7 @@ pub fn covariance<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
 //
 // S_n = S_{n-1} + ((n-1)/n) * (x_n - mu_x_{n-1}) * (y_n - mu_y_{n-1})
 //
-pub fn correlation<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
+pub fn correlation<T: F64>(data1: &[T], data2: &[T]) -> f64 {
     let mut sum_xsq = 0.0;
     let mut sum_ysq = 0.0;
     let mut sum_cross = 0.0;
@@ -121,13 +121,13 @@ pub fn correlation<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
 
 // kurtosis
 
-pub fn kurtosis<T: F64>(data: &Vec<T>) -> f64 {
+pub fn kurtosis<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     let est_sd = sd_mean(data, mean);
     kurtosis_main_sd(data, mean, est_sd)
 }
 
-pub fn kurtosis_main_sd<T: F64>(data: &Vec<T>, mean: f64, sd: f64) -> f64 {
+pub fn kurtosis_main_sd<T: F64>(data: &[T], mean: f64, sd: f64) -> f64 {
     let mut avg = 0.0;
 
     // calculate the fourth moment the deviations, normalized by the sd
@@ -144,12 +144,12 @@ pub fn kurtosis_main_sd<T: F64>(data: &Vec<T>, mean: f64, sd: f64) -> f64 {
 
 // lag-1
 
-pub fn lag1autocorrelation<T: F64>(data: &Vec<T>) -> f64 {
+pub fn lag1autocorrelation<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     return lag1autocorrelation_mean(data, mean);
 }
 
-pub fn lag1autocorrelation_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn lag1autocorrelation_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     let mut q = 0.0;
     let mut v = (data[0].f64() - mean) * (data[0].f64() - mean);
 
@@ -166,7 +166,7 @@ pub fn lag1autocorrelation_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
 
 // MedianFromSortedData calculates the median of the sorted data.
 // Note that the function doesn't check wheather the data is actually sorted.
-pub fn median_from_sorted_data<T: F64>(sorted_data: &Vec<T>) -> f64 {
+pub fn median_from_sorted_data<T: F64>(sorted_data: &[T]) -> f64 {
     let len = sorted_data.len();
     let lhs = (len - 1) / 2;
     let rhs = len / 2;
@@ -185,7 +185,7 @@ pub fn median_from_sorted_data<T: F64>(sorted_data: &Vec<T>) -> f64 {
 // minmax
 
 // Max finds the first largest member and the members position within the data
-pub fn max<T: F64>(data: &Vec<T>) -> (f64, usize) {
+pub fn max<T: F64>(data: &[T]) -> (f64, usize) {
     let mut max = data[0].f64();
     let mut max_index = 0;
 
@@ -207,7 +207,7 @@ pub fn max<T: F64>(data: &Vec<T>) -> (f64, usize) {
 }
 
 // Min finds the first smallest member and the members position within the data
-pub fn min<T: F64>(data: &Vec<T>) -> (f64, usize) {
+pub fn min<T: F64>(data: &[T]) -> (f64, usize) {
     let mut min = data[0].f64();
     let mut min_index = 0;
 
@@ -230,7 +230,7 @@ pub fn min<T: F64>(data: &Vec<T>) -> (f64, usize) {
 
 // Minmax finds the first smallest and largest members and
 // the members positions within the data
-pub fn minmax<T: F64>(data: &Vec<T>) -> (f64, u32, f64, u32) {
+pub fn minmax<T: F64>(data: &[T]) -> (f64, u32, f64, u32) {
     let mut min_index: u32 = 0;
     let mut max_index: u32 = 0;
     let mut min = data[0].f64();
@@ -263,7 +263,7 @@ pub fn minmax<T: F64>(data: &Vec<T>) -> (f64, u32, f64, u32) {
 // pvariance
 
 // p_variance finds the pooled variance of two datasets
-pub fn p_variance<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
+pub fn p_variance<T: F64>(data1: &[T], data2: &[T]) -> f64 {
     let n1 = data1.len();
     let n2 = data2.len();
 
@@ -278,7 +278,7 @@ pub fn p_variance<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
 // QuantileFromSortedData performs the quantile function, also called percent
 // point function or inverse cumulative distribution function, on the sorted data.
 // Note that the function doesn't check wheather the data is actually sorted.
-pub fn quantile_from_sorted_data<T: F64>(sorted_data: &Vec<T>, f: f64) -> f64 {
+pub fn quantile_from_sorted_data<T: F64>(sorted_data: &[T], f: f64) -> f64 {
     let n = sorted_data.len() as i32;
     let index = f * (n - 1) as f64;
     let lhs = index as i32;
@@ -298,14 +298,14 @@ pub fn quantile_from_sorted_data<T: F64>(sorted_data: &Vec<T>, f: f64) -> f64 {
 
 // skew
 
-pub fn skew<T: F64>(data: &Vec<T>) -> f64 {
+pub fn skew<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     let sd = sd_mean(data, mean);
     skew_mean_sd(data, mean, sd)
 }
 
 // Skew_mean_sd calculates the skewness of a dataset
-pub fn skew_mean_sd<T: F64>(data: &Vec<T>, mean: f64, sd: f64) -> f64 {
+pub fn skew_mean_sd<T: F64>(data: &[T], mean: f64, sd: f64) -> f64 {
     let mut skew = 0.0;
     for (i, val) in data.iter().enumerate() {
         let x = (val.f64() - mean) / sd;
@@ -319,7 +319,7 @@ pub fn skew_mean_sd<T: F64>(data: &Vec<T>, mean: f64, sd: f64) -> f64 {
 // runs a t-test between two datasets representing independent
 // samples. Tests to see if the difference between means of the
 // samples is different from zero.
-pub fn t_test<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
+pub fn t_test<T: F64>(data1: &[T], data2: &[T]) -> f64 {
     let n1 = data1.len() as f64;
     let n2 = data2.len() as f64;
 
@@ -333,7 +333,7 @@ pub fn t_test<T: F64>(data1: &Vec<T>, data2: &Vec<T>) -> f64 {
 
 // variance
 
-fn _variance<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+fn _variance<T: F64>(data: &[T], mean: f64) -> f64 {
     let mut variance = 0.0;
 
     // calculate the sum of the squares
@@ -345,36 +345,36 @@ fn _variance<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
     variance
 }
 
-pub fn variance_with_fixed_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn variance_with_fixed_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     _variance(data, mean)
 }
 
-pub fn sd_with_fixed_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn sd_with_fixed_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     _variance(data, mean).sqrt()
 }
 
-pub fn variance_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn variance_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     let variance = _variance(data, mean);
     variance * (data.len() as f64) / (data.len() - 1) as f64
 }
 
-pub fn sd_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn sd_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     let variance = _variance(data, mean);
     (variance * (data.len() as f64) / (data.len() - 1) as f64).sqrt()
 }
 
-pub fn variance<T: F64>(data: &Vec<T>) -> f64 {
+pub fn variance<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     variance_mean(data, mean)
 }
 
-pub fn sd<T: F64>(data: &Vec<T>) -> f64 {
+pub fn sd<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     return sd_mean(data, mean);
 }
 
 // tss_mean takes a dataset and finds the sum of squares about the mean
-pub fn tss_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
+pub fn tss_mean<T: F64>(data: &[T], mean: f64) -> f64 {
     let mut res = 0.0;
 
     // find the sum of the squares
@@ -385,20 +385,20 @@ pub fn tss_mean<T: F64>(data: &Vec<T>, mean: f64) -> f64 {
     res
 }
 
-pub fn tss<T: F64>(data: &Vec<T>) -> f64 {
+pub fn tss<T: F64>(data: &[T]) -> f64 {
     let mean = mean(data);
     return tss_mean(data, mean);
 }
 
 // wabsdev
 
-pub fn w_absdev<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_absdev<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     w_absdev_mean(w, data, wmean)
 }
 
 // WAbsdev_mean calculates the weighted absolute deviation of a dataset
-pub fn w_absdev_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn w_absdev_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let mut wabsdev = 0.0;
     let mut weight = 0.0;
 
@@ -417,14 +417,14 @@ pub fn w_absdev_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
 
 // wkurtosis
 
-pub fn w_kurtosis<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_kurtosis<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     let wsd = w_sd_mean(w, data, wmean);
     w_kurtosis_mean_sd(w, data, wmean, wsd)
 }
 
 // w_kurtosis_mean calculates the kurtosis of a dataset
-pub fn w_kurtosis_mean_sd<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64, wsd: f64) -> f64 {
+pub fn w_kurtosis_mean_sd<T: F64>(w: &[T], data: &[T], wmean: f64, wsd: f64) -> f64 {
     let mut wavg = 0.0;
     let mut weight = 0.0;
 
@@ -443,7 +443,7 @@ pub fn w_kurtosis_mean_sd<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64, wsd: f6
 // wmean
 
 // w_mean calculates the weighted arithmetic mean of a dataset
-pub fn w_mean<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_mean<T: F64>(w: &[T], data: &[T]) -> f64 {
     let mut wmean = 0.0;
     let mut weight = 0.0;
 
@@ -460,14 +460,14 @@ pub fn w_mean<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
 
 // wskew
 
-pub fn w_skew<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_skew<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     let wsd = w_sd_mean(w, data, wmean);
     return w_skew_mean_sd(w, data, wmean, wsd);
 }
 
 // Compute the weighted skewness of a dataset
-pub fn w_skew_mean_sd<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64, wsd: f64) -> f64 {
+pub fn w_skew_mean_sd<T: F64>(w: &[T], data: &[T], wmean: f64, wsd: f64) -> f64 {
     let mut wskew = 0.0;
     let mut weight = 0.0;
 
@@ -485,7 +485,7 @@ pub fn w_skew_mean_sd<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64, wsd: f64) -
 
 // wvariance
 
-fn wvariance<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+fn wvariance<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let mut weight = 0.0;
     let mut wvariance = 0.0;
 
@@ -501,7 +501,7 @@ fn wvariance<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
     wvariance
 }
 
-fn factor<T: F64>(w: &Vec<T>) -> f64 {
+fn factor<T: F64>(w: &[T]) -> f64 {
     let mut a = 0.0;
     let mut b = 0.0;
 
@@ -516,40 +516,40 @@ fn factor<T: F64>(w: &Vec<T>) -> f64 {
     (a * a) / ((a * a) - b)
 }
 
-pub fn w_variance_with_fixed_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn w_variance_with_fixed_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     wvariance(w, data, wmean)
 }
 
-pub fn wsd_with_fixed_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn wsd_with_fixed_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let wvariance = wvariance(w, data, wmean);
     wvariance.sqrt()
 }
 
-pub fn w_variance_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn w_variance_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let variance = wvariance(w, data, wmean);
     let scale = factor(w);
 
     scale * variance
 }
 
-pub fn w_sd_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn w_sd_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let variance = wvariance(w, data, wmean);
     let scale = factor(w);
     (scale * variance).sqrt()
 }
 
-pub fn w_sd<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_sd<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     w_sd_mean(w, data, wmean)
 }
 
-pub fn w_variance<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_variance<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     w_variance_mean(w, data, wmean)
 }
 
 // w_tss_mean takes a dataset and finds the weighted sum of squares about wmean
-pub fn w_tss_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
+pub fn w_tss_mean<T: F64>(w: &[T], data: &[T], wmean: f64) -> f64 {
     let mut res = 0.0;
 
     // find the sum of the squares
@@ -563,7 +563,7 @@ pub fn w_tss_mean<T: F64>(w: &Vec<T>, data: &Vec<T>, wmean: f64) -> f64 {
     res
 }
 
-pub fn w_tss<T: F64>(w: &Vec<T>, data: &Vec<T>) -> f64 {
+pub fn w_tss<T: F64>(w: &[T], data: &[T]) -> f64 {
     let wmean = w_mean(w, data);
     return w_tss_mean(w, data, wmean);
 }

@@ -27,97 +27,96 @@ use stat::*;
 fn test_i32_slice() {
     // sample sets of integers
 
-    let vec_1 = vec![1, 2, 3, 4, 5, 6];
+    let slice_1 = &[1, 2, 3, 4, 5, 6];
 
-    let vec_a = vec![17, 18, 16, 18, 12, 20, 18, 20, 20, 22, 20, 10, 8, 12, 16, 16, 18, 20, 18, 21];
+    let slice_a = &[17, 18, 16, 18, 12, 20, 18, 20, 20, 22, 20, 10, 8, 12, 16, 16, 18, 20, 18, 21];
 
-    let vec_b = vec![19, 20, 22, 24, 10, 25, 20, 22, 21, 23, 20, 10, 12, 14, 12, 20, 22, 24, 23,
-                     17];
+    let slice_b = &[19, 20, 22, 24, 10, 25, 20, 22, 21, 23, 20, 10, 12, 14, 12, 20, 22, 24, 23, 17];
 
     let rel = 1.0e-10;
 
     {
-        let mean = mean(&vec_a);
+        let mean = mean(slice_a);
         let expected = 17.0;
         gsl::test_rel(mean, expected, rel, "mean(integer)");
     }
 
     {
-        let mean = mean(&vec_1);
+        let mean = mean(slice_1);
         let expected = 3.5;
         gsl::test_rel(mean, expected, rel, "mean(fractional)");
     }
 
     {
-        let mean = mean(&vec_a);
-        let variance = variance_with_fixed_mean(&vec_a, mean);
+        let mean = mean(slice_a);
+        let variance = variance_with_fixed_mean(slice_a, mean);
         let expected = 13.7;
         gsl::test_rel(variance, expected, rel, "variance_with_fixed_mean");
     }
 
     {
-        let mean = mean(&vec_a);
-        let sd = sd_with_fixed_mean(&vec_a, mean);
+        let mean = mean(slice_a);
+        let sd = sd_with_fixed_mean(slice_a, mean);
         let expected = 3.70135110466435;
         gsl::test_rel(sd, expected, rel, "sd_with_fixed_mean");
     }
 
     {
-        let variance = variance(&vec_a);
+        let variance = variance(slice_a);
         let expected = 14.4210526315789;
         gsl::test_rel(variance, expected, rel, "variance");
     }
 
     {
-        let sd_est = sd(&vec_a);
+        let sd_est = sd(slice_a);
         let expected = 3.79750610685209;
         gsl::test_rel(sd_est, expected, rel, "sd");
     }
 
     {
-        let absdev = absdev(&vec_a);
+        let absdev = absdev(slice_a);
         let expected = 2.9;
         gsl::test_rel(absdev, expected, rel, "absdev");
     }
 
     {
-        let skew = skew(&vec_a);
+        let skew = skew(slice_a);
         let expected = -0.909355923168064;
         gsl::test_rel(skew, expected, rel, "skew");
     }
 
     {
-        let kurt = kurtosis(&vec_a);
+        let kurt = kurtosis(slice_a);
         let expected = -0.233692524908094;
         gsl::test_rel(kurt, expected, rel, "kurtosis");
     }
 
     {
-        let c = covariance(&vec_a, &vec_b);
+        let c = covariance(slice_a, slice_b);
         let expected = 14.5263157894737;
         gsl::test_rel(c, expected, rel, "covariance");
     }
 
     {
-        let r = correlation(&vec_a, &vec_b);
+        let r = correlation(slice_a, slice_b);
         let expected = 0.793090350710101;
         gsl::test_rel(r, expected, rel, "correlation");
     }
 
     {
-        let pv = p_variance(&vec_a, &vec_b);
+        let pv = p_variance(slice_a, slice_b);
         let expected = 18.8421052631579;
         gsl::test_rel(pv, expected, rel, "p_variance");
     }
 
     {
-        let t = t_test(&vec_a, &vec_b);
+        let t = t_test(slice_a, slice_b);
         let expected = -1.45701922702927;
         gsl::test_rel(t, expected, rel, "t_test");
     }
 
     {
-        let (maxf, max_index) = max(&vec_a);
+        let (maxf, max_index) = max(slice_a);
         let max = maxf as i64;
         let expected = 22i64;
         let expected_index = 9;
@@ -132,7 +131,7 @@ fn test_i32_slice() {
     }
 
     {
-        let (minf, min_index) = min(&vec_a);
+        let (minf, min_index) = min(slice_a);
         let min = minf as i32;
         let expected = 8;
         let expected_index = 12;
@@ -147,7 +146,7 @@ fn test_i32_slice() {
     }
 
     {
-        let (minf, min_index, maxf, max_index) = minmax(&vec_a);
+        let (minf, min_index, maxf, max_index) = minmax(slice_a);
         let min = minf as i32;
         let max = maxf as i32;
         let expected_max = 22;
@@ -172,7 +171,7 @@ fn test_i32_slice() {
         gsl::test(min_index != expected_min_index, &str4);
     }
 
-    let mut sorted = vec_a.clone();
+    let mut sorted = slice_a.clone();
     sorted.sort();
 
     {
